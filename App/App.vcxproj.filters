@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{2AEC870B-96F5-877C-1F71-9E7C8B79937C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{D6F3AE0D-4208-D7BE-0B8A-7A1E775DD3EF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\CommonInclude.h" />
+    <ClInclude Include="Source\GUI\Bar.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Element.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Model\Enemy.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Model\Item.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Model\Modifiers.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Model\Player.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Model\PlayerStats.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Model\Projectile.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\Utility.h" />
+    <ClInclude Include="Source\GUI\Panel.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\GUI\Bar.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Element.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Model\Enemy.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Model\Item.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Model\Modifiers.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Model\Player.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Model\Projectile.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Utility\Utility.cpp" />
+    <ClCompile Include="Source\GUI\Panel.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\Source.rar" />
+  </ItemGroup>
+</Project>
