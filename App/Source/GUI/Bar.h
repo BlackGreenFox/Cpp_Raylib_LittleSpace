@@ -22,7 +22,7 @@ private:
 	float _minValue = 0;
 
 	Color _color;
-	Vector2 _mainSize;
+	Vector2 _size;
 	Vector2 _maxSize;
 	Vector2 _bufferSize;
 	Vector2 _targetSize;

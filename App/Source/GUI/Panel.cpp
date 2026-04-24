@@ -17,12 +17,20 @@ Panel::~Panel()
 void Panel::Update(float deltaTime)
 {
 	if (!_isActive)
+	{
+		_isHovered = false;
+		_isClicked = false;
 		return;
+	}
+
+
+	_isHovered = CheckCollisionPointRec(GetMousePosition(), GetRect());
+	_isClicked = _isHovered && IsMouseButtonDown(MOUSE_LEFT_BUTTON);
 }
 
 void Panel::Draw()
 {
-	if (!_isActive)
+	if (!_isVisible)
 		return;
 
 
@@ -31,6 +39,11 @@ void Panel::Draw()
 	DrawRectangleRounded(panelRect, 0.06, 6, _colorBackground);
 	DrawRectangleRoundedLinesEx(panelRect, 0.06, 6, _borderThickness, _color);
 
+	if (_isHovered)
+	{
+		Rectangle hoverRect = { _position.x - 6, _position.y - 6, panelRect.width + 12 , panelRect.height + 12 };
+		DrawRectangleRoundedLinesEx(hoverRect, 0.06, 6, _borderHoverThickness, _colorHover);
+	}
 
 	Vector2 panelCenter = Vector2Add(_position, Vector2Scale(_size, 0.5f));
 	int titlePositionX = panelCenter.x - MeasureText(_title.c_str(), _titleFontSize) / 2;
@@ -44,7 +57,9 @@ void Panel::Draw()
 	DrawText(_description.c_str(), descriptionPositionX, descriptionPositionY, _descriptionFontSize, WHITE);
 }
 
-Rectangle Panel::GetBounds() const
+
+
+Rectangle Panel::GetRect() const
 {
 	return Rectangle{ _position.x, _position.y, _size.x, _size.y };
 }

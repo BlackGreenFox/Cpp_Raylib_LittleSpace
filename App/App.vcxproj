@@ -147,6 +147,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\GUI\ButtonToggle.h" />
+    <ClInclude Include="Source\GUI\Button.h" />
     <ClInclude Include="Source\CommonInclude.h" />
     <ClInclude Include="Source\GUI\Bar.h" />
     <ClInclude Include="Source\GUI\Element.h" />
@@ -160,6 +162,8 @@
     <ClInclude Include="Source\Utility\Utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\GUI\ButtonToggle.cpp" />
+    <ClCompile Include="Source\GUI\Button.cpp" />
     <ClCompile Include="Source\GUI\Bar.cpp" />
     <ClCompile Include="Source\GUI\Element.cpp" />
     <ClCompile Include="Source\GUI\Panel.cpp" />

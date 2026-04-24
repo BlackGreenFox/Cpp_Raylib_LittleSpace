@@ -6,8 +6,8 @@
 #include <Model/Player.h>
 #include <GUI/Bar.h>
 #include <GUI/Panel.h>
-
-
+#include <GUI/Button.h>
+#include <GUI/ButtonToggle.h>
 #include <CommonInclude.h>
 
 
@@ -31,8 +31,11 @@ int main(void)
     Vector2 panel_size = Vector2{ 300, 400 };
     Vector2 panel_pos = Vector2{ 500, 200 };
 
+    Vector2 button_size = Vector2{ 30, 30 };
+    Vector2 button_pos = Vector2{ panel_pos.x, panel_pos.y + panel_size.y + 20 };
 
 	Panel panel = Panel(panel_pos, panel_size, "Item", "This is the item");
+    ButtonToggle button = ButtonToggle(button_pos, button_size, "x");
 	Bar expBar = Bar(pos_level, size_level, MAIN_GOOD_COLOR, 40, 100);
 
     SetTargetFPS(60);
@@ -79,6 +82,7 @@ int main(void)
 		enemy.Update(deltaTime);
         expBar.Update(deltaTime);
         panel.Update(deltaTime);
+        button.Update(deltaTime);
 
         UpdateProjectiles(deltaTime);
         DrawProjectiles();
@@ -91,7 +95,7 @@ int main(void)
         player.Draw();
 		expBar.Draw();
 		panel.Draw();
-
+        button.Draw();
         EndDrawing();
         // --------------------------------------------------
     }

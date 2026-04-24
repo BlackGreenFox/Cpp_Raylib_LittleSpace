@@ -19,11 +19,16 @@ private:
 
 	Color _colorBackground = SECOND_BACKGROUND_COLOR;
 	Color _color = MAIN_GOOD_COLOR;
+	Color _colorHover = WHITE;
 
-	Vector2 _size;
-	Vector2 _position;
 
 	float _borderThickness = 3;
+	float _borderHoverThickness = 3;
+
+	bool _isHovered;
+	bool _isClicked;
+
+
 
 public:
 	Panel(Vector2 position, Vector2 size, std::string title, std::string description);
@@ -31,6 +36,7 @@ public:
 
 	void Update(float deltaTime) override;
 	void Draw() override;
-
+private:
+	Rectangle GetRect() const;
 };
 

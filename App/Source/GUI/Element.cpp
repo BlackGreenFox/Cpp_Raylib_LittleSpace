@@ -40,3 +40,8 @@ void Element::SetActive(bool active)
 {
 	_isActive = active;
 }
+
+void Element::SetVisible(bool value)
+{
+	_isVisible = value;
+}

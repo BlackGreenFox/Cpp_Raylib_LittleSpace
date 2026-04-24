@@ -11,7 +11,7 @@ bool IsSizeEqual(Vector2 a, Vector2 b)
 Bar::Bar(Vector2 position, Vector2 size, Color color, float value, float maxValue)
 {
 	_position = position;
-	_mainSize = size;
+	_size = size;
 	_maxSize = size;
 	_color = color;
 
@@ -19,9 +19,9 @@ Bar::Bar(Vector2 position, Vector2 size, Color color, float value, float maxValu
 	_value = value;
 
 	float percent = _value / _maxValue;
-	_mainSize.x = _maxSize.x * percent;
+	_size.x = _maxSize.x * percent;
 	 
-	_bufferSize = _mainSize;
+	_bufferSize = _size;
 }
 
 Bar::~Bar()
@@ -35,7 +35,7 @@ void Bar::SetValue(float value)
 
 
 	float percent = _value / _maxValue;
-	_targetSize = { _maxSize.x * percent, _mainSize.y };
+	_targetSize = { _maxSize.x * percent, _size.y };
 
 	if (_value > oldValue)
 	{
@@ -75,18 +75,18 @@ void Bar::Update(float deltaTime)
 		}
 		break;
 	case Bar::AnimationState::IncreasingMain:
-		_mainSize = Utility::Lerp(_mainSize, _targetSize, mainFillSpeed);
-		if (IsSizeEqual(_targetSize, _mainSize))
+		_size = Utility::Lerp(_size, _targetSize, mainFillSpeed);
+		if (IsSizeEqual(_targetSize, _size))
 		{
-			_mainSize = _targetSize;
+			_size = _targetSize;
 			_state = AnimationState::None;
 		}
 		break;
 	case Bar::AnimationState::DecreasingMain:
-		_mainSize = Utility::Lerp(_mainSize, _targetSize, mainFillSpeed);
-		if (IsSizeEqual(_mainSize, _targetSize))
+		_size = Utility::Lerp(_size, _targetSize, mainFillSpeed);
+		if (IsSizeEqual(_size, _targetSize))
 		{
-			_mainSize = _targetSize;
+			_size = _targetSize;
 			_state = AnimationState::DecreasingBuffer;
 		}
 		break;
@@ -104,5 +104,5 @@ void Bar::Draw()
 	
 	DrawRectangleV(_position, _maxSize, SECOND_BACKGROUND_COLOR);
 	DrawRectangleV(_position, _bufferSize, WHITE);
-	DrawRectangleV(_position, _mainSize, _color);
+	DrawRectangleV(_position, _size, _color);
 }
