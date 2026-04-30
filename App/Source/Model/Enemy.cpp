@@ -44,3 +44,13 @@ void Enemy::SetActive(bool active)
 {
 	_active = active;
 }
+
+float Enemy::GetSize()
+{
+	return (float)_enemyType * 7;
+}
+
+Vector2 Enemy::GetPosition()
+{
+	return _position;
+}

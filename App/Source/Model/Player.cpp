@@ -141,5 +141,20 @@ void Player::Draw()
 {
 	DrawPolyLinesEx(position, 4, 10, rotate, 2, WHITE);
 	DrawPolyLinesEx(position, 3, 40, rotate, 5, PLAYER);
+	DrawCircleLines(position.x,position.y, stats.expAttractRange, WHITE);
 }
 
+Vector2 Player::GetPosition()
+{
+	return position;
+}
+
+void Player::SetPosition(Vector2 value)
+{
+	position = value;
+}
+
+PlayerStats Player::GetStats() const
+{
+	return stats;
+}

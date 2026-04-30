@@ -2,18 +2,24 @@
 
 #include "raylib.h"
 
+
+
 #include "Model/Enemy.h"
 #include <Model/Player.h>
+#include <Model/ExperienceCube.h>
+
 #include <GUI/Bar.h>
-#include <GUI/Panel.h>
+#include <GUI/PanelItem.h>
 #include <GUI/Button.h>
 #include <GUI/ButtonToggle.h>
 #include <CommonInclude.h>
 
-
+#include "Managers/CollisionManager.h"
 
 const float ENEMY_RANDOM_ANGLE = 30 * DEG2RAD;
 
+
+using std::vector;
 
 int main(void)
 {
@@ -22,7 +28,7 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "My game");
 
-	Enemy enemy;
+
     Player player;
 
     Vector2 size_level = Vector2{ 1700, 20 };
@@ -34,16 +40,28 @@ int main(void)
     Vector2 button_size = Vector2{ 30, 30 };
     Vector2 button_pos = Vector2{ panel_pos.x, panel_pos.y + panel_size.y + 20 };
 
-	Panel panel = Panel(panel_pos, panel_size, "Item", "This is the item");
+	PanelItem panel = PanelItem(panel_pos, panel_size, "Item", "This is the item");
     ButtonToggle button = ButtonToggle(button_pos, button_size, "x");
 	Bar expBar = Bar(pos_level, size_level, MAIN_GOOD_COLOR, 40, 100);
 
     SetTargetFPS(60);
 
-	enemy.Init({ screenWidth / 2.0f, screenHeight / 2.0f }, { 1, 1});
-
+	
     Vector2 position = { screenWidth / 2.0f, screenHeight / 2.0f };
     Vector2 line[2] = { {1, 1}, {1, 1} };
+
+	vector<Enemy> enemies;
+    vector<ExperienceCube> exp;
+
+    exp.push_back(ExperienceCube());
+	exp[0].Init({screenWidth / 2.0f, screenHeight / 2.0f}, {1, 1}, &player);
+
+
+    for (size_t i = 0; i < 4; i++)
+    {
+        enemies.push_back(Enemy());
+        enemies[i].Init({screenWidth / 2.0f, screenHeight / 2.0f}, {1, 1});
+    }
 
     while (!WindowShouldClose())
     {
@@ -79,23 +97,36 @@ int main(void)
         }
 
         player.Update(deltaTime);
-		enemy.Update(deltaTime);
+
+		for (auto& enemy : enemies)
+            enemy.Update(deltaTime);
+	
         expBar.Update(deltaTime);
         panel.Update(deltaTime);
         button.Update(deltaTime);
+        for (auto& e : exp)
+            e.Update(deltaTime);
 
         UpdateProjectiles(deltaTime);
+
+
+		CollisionManager::Update(player, enemies, projectiles, exp, deltaTime);
+
         DrawProjectiles();
 
         // Draw
         // --------------------------------------------------
         ClearBackground(MAIN_BACKGROUND_COLOR);
         BeginDrawing();
-        enemy.Draw();
+
+        for (auto& enemy : enemies)
+            enemy.Draw();
         player.Draw();
-		expBar.Draw();
-		panel.Draw();
-        button.Draw();
+        for (auto& e : exp)
+            e.Draw();
+		//expBar.Draw();
+		//panel.Draw();
+  //      button.Draw();
         EndDrawing();
         // --------------------------------------------------
     }

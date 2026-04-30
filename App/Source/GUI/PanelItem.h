@@ -6,7 +6,7 @@
 #include <string>
 
 
-class Panel : public Element
+class PanelItem : public Element
 {
 private:
 
@@ -28,11 +28,9 @@ private:
 	bool _isHovered;
 	bool _isClicked;
 
-
-
 public:
-	Panel(Vector2 position, Vector2 size, std::string title, std::string description);
-	~Panel();
+	PanelItem(Vector2 position, Vector2 size, std::string title, std::string description);
+	~PanelItem();
 
 	void Update(float deltaTime) override;
 	void Draw() override;

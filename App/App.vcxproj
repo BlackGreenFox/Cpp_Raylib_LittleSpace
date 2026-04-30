@@ -147,29 +147,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Managers\GameManager.h" />
+    <ClInclude Include="Source\Managers\CollisionManager.h" />
     <ClInclude Include="Source\GUI\ButtonToggle.h" />
     <ClInclude Include="Source\GUI\Button.h" />
     <ClInclude Include="Source\CommonInclude.h" />
     <ClInclude Include="Source\GUI\Bar.h" />
     <ClInclude Include="Source\GUI\Element.h" />
-    <ClInclude Include="Source\GUI\Panel.h" />
+    <ClInclude Include="Source\GUI\PanelItem.h" />
     <ClInclude Include="Source\Model\Enemy.h" />
+    <ClInclude Include="Source\Model\ExperienceCube.h" />
     <ClInclude Include="Source\Model\Item.h" />
     <ClInclude Include="Source\Model\Modifiers.h" />
+    <ClInclude Include="Source\Model\Particle.h" />
     <ClInclude Include="Source\Model\Player.h" />
     <ClInclude Include="Source\Model\PlayerStats.h" />
     <ClInclude Include="Source\Model\Projectile.h" />
     <ClInclude Include="Source\Utility\Utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Managers\GameManager.cpp" />
+    <ClCompile Include="Source\Managers\CollisionManager.cpp" />
     <ClCompile Include="Source\GUI\ButtonToggle.cpp" />
     <ClCompile Include="Source\GUI\Button.cpp" />
     <ClCompile Include="Source\GUI\Bar.cpp" />
     <ClCompile Include="Source\GUI\Element.cpp" />
-    <ClCompile Include="Source\GUI\Panel.cpp" />
+    <ClCompile Include="Source\GUI\PanelItem.cpp" />
     <ClCompile Include="Source\Model\Enemy.cpp" />
+    <ClCompile Include="Source\Model\ExperienceCube.cpp" />
     <ClCompile Include="Source\Model\Item.cpp" />
     <ClCompile Include="Source\Model\Modifiers.cpp" />
+    <ClCompile Include="Source\Model\Particle.cpp" />
     <ClCompile Include="Source\Model\Player.cpp" />
     <ClCompile Include="Source\Model\Projectile.cpp" />
     <ClCompile Include="Source\main.cpp" />

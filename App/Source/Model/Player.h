@@ -13,6 +13,11 @@ public:
 	void Update(float deltaTime);
 	void Draw();
 
+	Vector2 GetPosition();
+	void SetPosition(Vector2 value);
+
+	PlayerStats GetStats() const;
+
 private:
 	void Shoot();
 

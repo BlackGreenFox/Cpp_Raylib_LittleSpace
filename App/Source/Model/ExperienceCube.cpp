@@ -1,0 +1,60 @@
+#include "ExperienceCube.h"
+
+ExperienceCube::ExperienceCube()
+{
+}
+
+ExperienceCube::~ExperienceCube()
+{
+}
+
+void ExperienceCube::Init(Vector2 position, Vector2 velocity, Player* target)
+{
+	_position = position;
+	_velocity = velocity;
+	_active = true;
+	_target = target;
+}
+
+void ExperienceCube::Update(float deltaTime)
+{
+	if (!_active)
+		return;
+	
+	_lifetime -= deltaTime;
+	
+	if (_lifetime <= 0)
+		_active = false;
+
+
+	Vector2 toTarget = Vector2Subtract(_target->GetPosition(), _position);
+	float dist = Vector2Length(toTarget);
+
+	
+	_velocity = Vector2Scale(_velocity, _attractSpeed * deltaTime);
+	if (dist < _target->GetStats().expAttractRange && dist > 0.0001f)
+	{
+		
+		Vector2 dir = Vector2Scale(toTarget, 1.0 / dist);
+		float strength = 1.0f - (dist / _target->GetStats().expAttractRange);
+		Vector2 attraction = Vector2Scale(dir, strength * _attractSpeedMax);
+		_velocity = Vector2Lerp(_velocity, attraction, deltaTime);
+		_position = Vector2Add(_position, Vector2Scale(_velocity, deltaTime));
+	}
+
+	
+}
+
+
+void ExperienceCube::Draw()
+{
+	if (!_active)
+		return;
+
+	DrawCircleV(_position, _size, _color);
+}
+
+float ExperienceCube::GetSize() const
+{
+	return _size;
+}

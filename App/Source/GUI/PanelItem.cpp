@@ -1,7 +1,7 @@
-#include "Panel.h"
+#include "PanelItem.h"
 #include <raymath.h>
 
-Panel::Panel(Vector2 position, Vector2 size, std::string title, std::string description)
+PanelItem::PanelItem(Vector2 position, Vector2 size, std::string title, std::string description)
 {
 	_position = position;
 	_size = size;
@@ -9,12 +9,12 @@ Panel::Panel(Vector2 position, Vector2 size, std::string title, std::string desc
 	_description = description;
 }
 
-Panel::~Panel()
+PanelItem::~PanelItem()
 {
 
 }
 
-void Panel::Update(float deltaTime)
+void PanelItem::Update(float deltaTime)
 {
 	if (!_isActive)
 	{
@@ -28,7 +28,7 @@ void Panel::Update(float deltaTime)
 	_isClicked = _isHovered && IsMouseButtonDown(MOUSE_LEFT_BUTTON);
 }
 
-void Panel::Draw()
+void PanelItem::Draw()
 {
 	if (!_isVisible)
 		return;
@@ -59,7 +59,7 @@ void Panel::Draw()
 
 
 
-Rectangle Panel::GetRect() const
+Rectangle PanelItem::GetRect() const
 {
 	return Rectangle{ _position.x, _position.y, _size.x, _size.y };
 }

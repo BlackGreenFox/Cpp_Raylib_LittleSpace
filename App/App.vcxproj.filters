@@ -35,9 +35,13 @@
       <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\Utility.h" />
-    <ClInclude Include="Source\GUI\Panel.h" />
+    <ClInclude Include="Source\GUI\PanelItem.h" />
     <ClInclude Include="Source\GUI\Button.h" />
     <ClInclude Include="Source\GUI\ButtonToggle.h" />
+    <ClInclude Include="Source\Managers\CollisionManager.h" />
+    <ClInclude Include="Source\Managers\GameManager.h" />
+    <ClInclude Include="Source\Model\Particle.h" />
+    <ClInclude Include="Source\Model\ExperienceCube.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GUI\Bar.cpp">
@@ -63,9 +67,13 @@
     </ClCompile>
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Utility\Utility.cpp" />
-    <ClCompile Include="Source\GUI\Panel.cpp" />
+    <ClCompile Include="Source\GUI\PanelItem.cpp" />
     <ClCompile Include="Source\GUI\Button.cpp" />
     <ClCompile Include="Source\GUI\ButtonToggle.cpp" />
+    <ClCompile Include="Source\Managers\CollisionManager.cpp" />
+    <ClCompile Include="Source\Managers\GameManager.cpp" />
+    <ClCompile Include="Source\Model\Particle.cpp" />
+    <ClCompile Include="Source\Model\ExperienceCube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Source.rar" />

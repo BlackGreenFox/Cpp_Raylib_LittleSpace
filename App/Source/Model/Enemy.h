@@ -22,6 +22,8 @@ public:
 
 	// Get ^ Set
 	bool GetActive();
+	float GetSize();
+	Vector2 GetPosition();
 	void SetActive(bool active);
 
 private:
