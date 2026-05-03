@@ -6,7 +6,7 @@
 
 #include "Model/Enemy.h"
 #include <Model/Player.h>
-#include <Model/ExperienceCube.h>
+
 
 #include <GUI/Bar.h>
 #include <GUI/PanelItem.h>
@@ -51,10 +51,8 @@ int main(void)
     Vector2 line[2] = { {1, 1}, {1, 1} };
 
 	vector<Enemy> enemies;
-    vector<ExperienceCube> exp;
 
-    exp.push_back(ExperienceCube());
-	exp[0].Init({screenWidth / 2.0f, screenHeight / 2.0f}, {1, 1}, &player);
+
 
 
     for (size_t i = 0; i < 4; i++)
@@ -104,30 +102,30 @@ int main(void)
         expBar.Update(deltaTime);
         panel.Update(deltaTime);
         button.Update(deltaTime);
-        for (auto& e : exp)
-            e.Update(deltaTime);
+
 
         UpdateProjectiles(deltaTime);
 
 
-		CollisionManager::Update(player, enemies, projectiles, exp, deltaTime);
+		CollisionManager::Update(player, enemies, projectiles, deltaTime);
 
         DrawProjectiles();
 
         // Draw
         // --------------------------------------------------
+
         ClearBackground(MAIN_BACKGROUND_COLOR);
         BeginDrawing();
 
         for (auto& enemy : enemies)
             enemy.Draw();
         player.Draw();
-        for (auto& e : exp)
-            e.Draw();
-		//expBar.Draw();
-		//panel.Draw();
-  //      button.Draw();
+
+		expBar.Draw();
+		panel.Draw();
+        button.Draw();
         EndDrawing();
+
         // --------------------------------------------------
     }
 
