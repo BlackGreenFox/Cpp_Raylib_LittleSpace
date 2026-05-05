@@ -3,13 +3,18 @@
 
 Player::Player() 
 {
-	position = { (float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2 };
-	stats.speed = 100;
-	rotate = 45;
+
 }
 
 Player::~Player() 
 {
+
+}
+
+void Player::Init(Vector2 position) 
+{
+	this->position = position;
+
 
 }
 
@@ -147,6 +152,11 @@ void Player::Draw()
 Vector2 Player::GetPosition()
 {
 	return position;
+}
+
+Vector2* Player::GetPositionPtr()
+{
+	return &position;
 }
 
 void Player::SetPosition(Vector2 value)

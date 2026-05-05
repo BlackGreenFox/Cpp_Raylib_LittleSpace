@@ -5,6 +5,7 @@
 #include "Model/Player.h"
 #include "Model/Enemy.h"
 #include "Model/Projectile.h"
+#include "Model/ExperienceCube.h"
 
 
 namespace CollisionManager
@@ -59,27 +60,27 @@ namespace CollisionManager
 		}
 	}
 
-	//static void HandlePlayerExpCollision(Player& player, vector<ExperienceCube>& exp)
-	//{
-	//	for (auto& e : exp)
-	//	{
-	//		if (!e.GetActive())
-	//			continue;
+	static void HandlePlayerExpirienceCollision(Player& player, vector<ExperienceCube>& exp)
+	{
+		for (auto& e : exp)
+		{
+			if (!e.GetActive())
+				continue;
 
-	//		if (CheckCollisionCircles(player.GetPosition(), player.GetStats().expPickupRange, e.GetPosition(), e.GetSize()))
-	//		{
-	//			std::cout << "Player picked up exp!" << std::endl;
-	//			e.SetActive(false);
-	//		}
-	//	}
-	//}
+			if (CheckCollisionCircles(player.GetPosition(), player.GetStats().expPickupRange, e.GetPosition(), e.GetSize()))
+			{
+				std::cout << "Player picked up exp!" << std::endl;
+				e.SetActive(false);
+			}
+		}
+	}
 
 
-	void Update(Player& player, vector<Enemy>& enemy, vector<Projectile>& bullets, float deltaTime)
+	void Update(Player& player, vector<Enemy>& enemy, vector<Projectile>& bullets, vector<ExperienceCube>& exp, float deltaTime)
 	{
 		HandleProjectileEnemyCollision(bullets, enemy);
 		HandlePlayerEnemyCollision(player, enemy);
-
+		HandlePlayerExpirienceCollision(player, exp);
 	}
 
 }

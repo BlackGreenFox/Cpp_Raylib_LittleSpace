@@ -10,10 +10,13 @@ public:
 	Player();
 	~Player();
 
+	void Init(Vector2 position);
 	void Update(float deltaTime);
 	void Draw();
 
 	Vector2 GetPosition();
+	Vector2* GetPositionPtr();
+
 	void SetPosition(Vector2 value);
 
 	PlayerStats GetStats() const;

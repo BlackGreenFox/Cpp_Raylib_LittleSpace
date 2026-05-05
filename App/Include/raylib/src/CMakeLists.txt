@@ -1,132 +1,165 @@
-# Setup the project and settings
-project(raylib C)
-set(PROJECT_VERSION 5.5.0)
-set(API_VERSION 550)
+cmake_minimum_required(VERSION 3.4...3.28 FATAL_ERROR)
+
+project(GLFW VERSION 3.4.0 LANGUAGES C)
+
+if (POLICY CMP0069)
+    cmake_policy(SET CMP0069 NEW)
+endif()
+
+if (POLICY CMP0077)
+    cmake_policy(SET CMP0077 NEW)
+endif()
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+string(COMPARE EQUAL "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}" GLFW_STANDALONE)
+
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+option(GLFW_BUILD_EXAMPLES "Build the GLFW example programs" ${GLFW_STANDALONE})
+option(GLFW_BUILD_TESTS "Build the GLFW test programs" ${GLFW_STANDALONE})
+option(GLFW_BUILD_DOCS "Build the GLFW documentation" ON)
+option(GLFW_INSTALL "Generate installation target" ON)
 
 include(GNUInstallDirs)
-include(JoinPaths)
+include(CMakeDependentOption)
 
-# Sets build type if not set by now
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    if(RAYLIB_IS_MAIN)
-        set(default_build_type Debug)
+if (GLFW_USE_OSMESA)
+    message(FATAL_ERROR "GLFW_USE_OSMESA has been removed; set the GLFW_PLATFORM init hint")
+endif()
+
+if (DEFINED GLFW_USE_WAYLAND AND UNIX AND NOT APPLE)
+    message(FATAL_ERROR
+        "GLFW_USE_WAYLAND has been removed; delete the CMake cache and set GLFW_BUILD_WAYLAND and GLFW_BUILD_X11 instead")
+endif()
+
+cmake_dependent_option(GLFW_BUILD_WIN32 "Build support for Win32" ON "WIN32" OFF)
+cmake_dependent_option(GLFW_BUILD_COCOA "Build support for Cocoa" ON "APPLE" OFF)
+cmake_dependent_option(GLFW_BUILD_X11 "Build support for X11" ON "UNIX;NOT APPLE" OFF)
+cmake_dependent_option(GLFW_BUILD_WAYLAND "Build support for Wayland" ON "UNIX;NOT APPLE" OFF)
+
+cmake_dependent_option(GLFW_USE_HYBRID_HPG "Force use of high-performance GPU on hybrid systems" OFF
+                       "WIN32" OFF)
+cmake_dependent_option(USE_MSVC_RUNTIME_LIBRARY_DLL "Use MSVC runtime library DLL" ON
+                       "MSVC" OFF)
+
+set(GLFW_LIBRARY_TYPE "${GLFW_LIBRARY_TYPE}" CACHE STRING
+    "Library type override for GLFW (SHARED, STATIC, OBJECT, or empty to follow BUILD_SHARED_LIBS)")
+
+if (GLFW_LIBRARY_TYPE)
+    if (GLFW_LIBRARY_TYPE STREQUAL "SHARED")
+        set(GLFW_BUILD_SHARED_LIBRARY TRUE)
     else()
-        message(WARNING "Default build type is not set (CMAKE_BUILD_TYPE)")
+        set(GLFW_BUILD_SHARED_LIBRARY FALSE)
     endif()
-
-    message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
-
-    set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Choose the type of build." FORCE)
-    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
-endif()
-
-# Used as public API to be included into other projects
-set(raylib_public_headers
-    raylib.h
-    rlgl.h
-    raymath.h
-    )
-
-# Sources to be compiled
-set(raylib_sources
-    raudio.c
-    rcore.c
-    rmodels.c
-    rshapes.c
-    rtext.c
-    rtextures.c
-    utils.c
-    )
-
-# <root>/cmake/GlfwImport.cmake handles the details around the inclusion of glfw
-if (NOT ${PLATFORM} MATCHES "Web")
-    include(GlfwImport)
-endif ()
-
-# Sets additional platform options and link libraries for each platform
-# also selects the proper graphics API and version for that platform
-# Produces a variable LIBS_PRIVATE that will be used later
-include(LibraryConfigurations)
-
-if (SUPPORT_MODULE_RAUDIO)
-    MESSAGE(STATUS "Audio Backend: miniaudio")
-else ()
-    MESSAGE(STATUS "Audio Backend: None (-DCUSTOMIZE_BUILD=ON -DSUPPORT_MODULE_RAUDIO=OFF)")
-endif ()
-
-add_library(raylib ${raylib_sources} ${raylib_public_headers})
-
-if (NOT BUILD_SHARED_LIBS)
-    MESSAGE(STATUS "Building raylib static library")
-    add_library(raylib_static ALIAS raylib)
 else()
-    MESSAGE(STATUS "Building raylib shared library")
-    target_compile_definitions(raylib
-                               PRIVATE $<BUILD_INTERFACE:BUILD_LIBTYPE_SHARED>
-                               INTERFACE $<INSTALL_INTERFACE:USE_LIBTYPE_SHARED>
-                               )
+    set(GLFW_BUILD_SHARED_LIBRARY ${BUILD_SHARED_LIBS})
 endif()
 
-if (${PLATFORM} MATCHES "Web")
-    target_link_options(raylib PUBLIC "-sUSE_GLFW=3")
-    if(${GRAPHICS} MATCHES "GRAPHICS_API_OPENGL_ES3")
-        target_link_options(raylib PUBLIC "-sMIN_WEBGL_VERSION=2")
-        target_link_options(raylib PUBLIC "-sMAX_WEBGL_VERSION=2")
+list(APPEND CMAKE_MODULE_PATH "${GLFW_SOURCE_DIR}/CMake/modules")
+
+find_package(Threads REQUIRED)
+
+#--------------------------------------------------------------------
+# Report backend selection
+#--------------------------------------------------------------------
+if (GLFW_BUILD_WIN32)
+    message(STATUS "Including Win32 support")
+endif()
+if (GLFW_BUILD_COCOA)
+    message(STATUS "Including Cocoa support")
+endif()
+if (GLFW_BUILD_WAYLAND)
+    message(STATUS "Including Wayland support")
+endif()
+if (GLFW_BUILD_X11)
+    message(STATUS "Including X11 support")
+endif()
+
+#--------------------------------------------------------------------
+# Apply Microsoft C runtime library option
+# This is here because it also applies to tests and examples
+#--------------------------------------------------------------------
+if (MSVC AND NOT USE_MSVC_RUNTIME_LIBRARY_DLL)
+    if (CMAKE_VERSION VERSION_LESS 3.15)
+        foreach (flag CMAKE_C_FLAGS
+                      CMAKE_C_FLAGS_DEBUG
+                      CMAKE_C_FLAGS_RELEASE
+                      CMAKE_C_FLAGS_MINSIZEREL
+                      CMAKE_C_FLAGS_RELWITHDEBINFO)
+
+            if (flag MATCHES "/MD")
+                string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
+            endif()
+            if (flag MATCHES "/MDd")
+                string(REGEX REPLACE "/MDd" "/MTd" ${flag} "${${flag}}")
+            endif()
+
+        endforeach()
+    else()
+        set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     endif()
 endif()
 
-set_target_properties(raylib PROPERTIES
-                      PUBLIC_HEADER "${raylib_public_headers}"
-                      VERSION ${PROJECT_VERSION}
-                      SOVERSION ${API_VERSION}
-                      )
+#--------------------------------------------------------------------
+# Create generated files
+#--------------------------------------------------------------------
+include(CMakePackageConfigHelpers)
 
-if (WITH_PIC OR BUILD_SHARED_LIBS)
-    set_property(TARGET raylib PROPERTY POSITION_INDEPENDENT_CODE ON)
-endif ()
+set(GLFW_CONFIG_PATH "${CMAKE_INSTALL_LIBDIR}/cmake/glfw3")
 
-if (BUILD_SHARED_LIBS)
-    # Hide raylib's symbols by default so RLAPI can expose them
-    set_property(TARGET raylib PROPERTY C_VISIBILITY_PRESET hidden)
-endif ()
+configure_package_config_file(CMake/glfw3Config.cmake.in
+                              src/glfw3Config.cmake
+                              INSTALL_DESTINATION "${GLFW_CONFIG_PATH}"
+                              NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 
-target_link_libraries(raylib "${LIBS_PRIVATE}")
+write_basic_package_version_file(src/glfw3ConfigVersion.cmake
+                                 VERSION ${GLFW_VERSION}
+                                 COMPATIBILITY SameMajorVersion)
 
-# Sets some compile time definitions for the pre-processor
-# If CUSTOMIZE_BUILD option is on you will not use config.h by default
-# and you will be able to select more build options
-include(CompileDefinitions)
+#--------------------------------------------------------------------
+# Add subdirectories
+#--------------------------------------------------------------------
+add_subdirectory(src)
 
-# Registering include directories
-target_include_directories(raylib
-                           PUBLIC
-                           $<INSTALL_INTERFACE:include>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-                           PRIVATE
-                           ${CMAKE_CURRENT_SOURCE_DIR}
-                           ${OPENGL_INCLUDE_DIR}
-                           ${OPENAL_INCLUDE_DIR}
-                           )
+if (GLFW_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 
-# Copy the header files to the build directory for convenience
-file(COPY ${raylib_public_headers} DESTINATION "include")
+if (GLFW_BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
 
-# Includes information on how the library will be installed on the system
-# when cmake --install is run
-include(InstallConfigurations)
+if (GLFW_BUILD_DOCS)
+    add_subdirectory(docs)
+endif()
 
-# Print the flags for the user
-if (DEFINED CMAKE_BUILD_TYPE)
-    message(STATUS "Generated build type: ${CMAKE_BUILD_TYPE}")
-else ()
-    message(STATUS "Generated config types: ${CMAKE_CONFIGURATION_TYPES}")
-endif ()
+#--------------------------------------------------------------------
+# Install files other than the library
+# The library is installed by src/CMakeLists.txt
+#--------------------------------------------------------------------
+if (GLFW_INSTALL)
+    install(DIRECTORY include/GLFW DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            FILES_MATCHING PATTERN glfw3.h PATTERN glfw3native.h)
 
-message(STATUS "Compiling with the flags:")
-message(STATUS "  PLATFORM=" ${PLATFORM_CPP})
-message(STATUS "  GRAPHICS=" ${GRAPHICS})
+    install(FILES "${GLFW_BINARY_DIR}/src/glfw3Config.cmake"
+                  "${GLFW_BINARY_DIR}/src/glfw3ConfigVersion.cmake"
+            DESTINATION "${GLFW_CONFIG_PATH}")
 
-# Options if you want to create an installer using CPack
-include(PackConfigurations)
+    install(EXPORT glfwTargets FILE glfw3Targets.cmake
+            EXPORT_LINK_INTERFACE_LIBRARIES
+            DESTINATION "${GLFW_CONFIG_PATH}")
+    install(FILES "${GLFW_BINARY_DIR}/src/glfw3.pc"
+            DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
 
-enable_testing()
+    # Only generate this target if no higher-level project already has
+    if (NOT TARGET uninstall)
+        configure_file(CMake/cmake_uninstall.cmake.in
+                       cmake_uninstall.cmake IMMEDIATE @ONLY)
+
+        add_custom_target(uninstall
+                          "${CMAKE_COMMAND}" -P
+                          "${GLFW_BINARY_DIR}/cmake_uninstall.cmake")
+        set_target_properties(uninstall PROPERTIES FOLDER "GLFW3")
+    endif()
+endif()
+

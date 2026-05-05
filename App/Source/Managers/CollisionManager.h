@@ -3,17 +3,16 @@
 #include <vector>
 
 
-
+class Player;
 class Enemy;
 class ExperienceCube;
-class Player;
 struct Projectile;
 
 using std::vector;
 
 namespace CollisionManager
 {
-	void Update(Player& player, vector<Enemy>& enemy, vector<Projectile>& bullets, float deltaTime);
+	void Update(Player& player, vector<Enemy>& enemy, vector<Projectile>& bullets, vector<ExperienceCube>& exp, float deltaTime);
 }
 
 
