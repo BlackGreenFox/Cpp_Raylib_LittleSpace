@@ -46,9 +46,6 @@
     <ClInclude Include="Source\Model\Item.h">
       <Filter>Model</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Model\Modifiers.h">
-      <Filter>Model</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Model\Particle.h">
       <Filter>Model</Filter>
     </ClInclude>
@@ -63,6 +60,9 @@
     </ClInclude>
     <ClInclude Include="Source\Utility\Utility.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Loadout.h">
+      <Filter>Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -94,9 +94,6 @@
       <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="Source\Model\Item.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Model\Modifiers.cpp">
       <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="Source\Model\Particle.cpp">

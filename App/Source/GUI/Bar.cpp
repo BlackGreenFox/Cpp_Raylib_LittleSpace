@@ -8,6 +8,12 @@ bool IsSizeEqual(Vector2 a, Vector2 b)
 }
 
 
+Bar::Bar()
+{
+
+}
+
+
 Bar::Bar(Vector2 position, Vector2 size, Color color, float value, float maxValue)
 {
 	_position = position;
@@ -27,6 +33,23 @@ Bar::Bar(Vector2 position, Vector2 size, Color color, float value, float maxValu
 Bar::~Bar()
 {
 }
+
+void Bar::Init(Vector2 position, Vector2 size, Color color, float value, float maxValue)
+{
+	_position = position;
+	_size = size;
+	_maxSize = size;
+	_color = color;
+
+	_maxValue = maxValue;
+	_value = value;
+
+	float percent = _value / _maxValue;
+
+	_size.x = _maxSize.x * percent;
+	_bufferSize = _size;
+}
+
 
 void Bar::SetValue(float value)
 {

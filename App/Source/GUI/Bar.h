@@ -31,8 +31,10 @@ private:
 	float _animationTimeMain = 0.45f;
 
 public:
+	Bar();
 	Bar(Vector2 position, Vector2 size, Color color, float value, float maxValue);
 	~Bar();
+	void Init(Vector2 position, Vector2 size, Color color, float value, float maxValue);
 	void Update(float deltaTime) override;
 	void Draw() override;
 

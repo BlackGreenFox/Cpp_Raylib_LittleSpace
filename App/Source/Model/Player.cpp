@@ -144,9 +144,26 @@ void Player::Update(float deltaTime)
 
 void Player::Draw() 
 {
-	DrawPolyLinesEx(position, 4, 10, rotate, 2, WHITE);
-	DrawPolyLinesEx(position, 3, 40, rotate, 5, PLAYER);
-	DrawCircleLines(position.x,position.y, stats.expAttractRange, WHITE);
+	float angleStep = 360.0f / 3.0f;
+	float smallRadius = 20.0f;
+	float offset = 60.0f;
+
+	Vector2 leftPos = {
+		position.x + cosf(DEG2RAD * (rotate + angleStep)) * offset,
+		position.y + sinf(DEG2RAD * (rotate + angleStep)) * offset
+	};
+
+
+	Vector2 rightPos = {
+		position.x + cosf(DEG2RAD * (rotate - angleStep)) * offset,
+		position.y + sinf(DEG2RAD * (rotate - angleStep)) * offset
+	};
+
+	DrawPolyLinesEx(position, 3, 40.0f, rotate, 15.0f, MAIN_BAD_COLOR);
+	DrawPolyLinesEx(leftPos, 3, smallRadius, rotate, 15.0f, WHITE);
+	DrawPolyLinesEx(rightPos, 3, smallRadius, rotate, 15.0f, WHITE);
+
+	//DrawCircleLines(position.x,position.y, stats.expAttractRange, WHITE);
 }
 
 Vector2 Player::GetPosition()

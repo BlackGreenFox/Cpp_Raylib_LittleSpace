@@ -30,7 +30,8 @@ public:
 	void Update(float deltaTime);
 	void Draw();
 
-	//void SpawnEnemy();
+	void SpawnEnemy(Vector2 position, Vector2 velocity, ENEMY_TYPE type);
+	void SpawnExp(Vector2 position, int amount);
 	//void SpawnProjectile();
 
 
@@ -51,12 +52,18 @@ private:
 
 	//void UpdateProjectiles(float deltaTime);
 	void UpdateEnemies(float deltaTime);
+	void ProcessExpirience(float deltaTime);
+	void ProcessEnemies(float deltaTime);
 	//void HandleCollisions();
 	//void TrySpawnEnemy(float deltaTime);
 
 
-	vector<Element> _gui;
-	
+
+	Bar _expBar;
+	Bar _bossHealthBar;
+
+
+
 	Player					 _player;
 
 	vector<Enemy>			 _enemies;
@@ -69,11 +76,10 @@ private:
 	int _expToNextLevel = 100;
 
 
-
-	int _enemiesMax = 5;
 	int _bossLevel = 5;
-
+	int _enemiesMax = 5;
+	float _spawnTimer = 0.0f;
+	float _enemySpawnInterval= 2.0f;
 
 
 };
-

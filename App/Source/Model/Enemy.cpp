@@ -10,7 +10,7 @@ Enemy::~Enemy()
 
 }
 
-void Enemy::Init(Vector2 position, Vector2 velocity)
+void Enemy::Init(Vector2 position, Vector2 velocity, ENEMY_TYPE type)
 {
 	_position = position;
 	_velocity = velocity;
@@ -18,6 +18,7 @@ void Enemy::Init(Vector2 position, Vector2 velocity)
 	_active = true;
 	_rotation = GetRandomValue(0, 360);
 	_rotation_speed = GetRandomValue(-50, 50);
+	_enemyType = type;
 }
 
 void Enemy::Update(float deltaTime)
@@ -32,7 +33,7 @@ void Enemy::Update(float deltaTime)
 void Enemy::Draw() {
 	if (!_active) 
 		return;
-	DrawPolyLines(_position, (int)_enemyType, (int)_enemyType * 7, _rotation, WHITE);
+	DrawPolyLinesEx(_position, (int)_enemyType, (int)_enemyType * 7, _rotation, 5.0f, WHITE);
 }
 
 bool Enemy::GetActive()

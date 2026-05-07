@@ -16,7 +16,7 @@ public:
 	Enemy();
 	~Enemy();
 
-	void Init(Vector2 position, Vector2 velocity);
+	void Init(Vector2 position, Vector2 velocity, ENEMY_TYPE type);
 	void Update(float deltaTime);
 	void Draw();
 

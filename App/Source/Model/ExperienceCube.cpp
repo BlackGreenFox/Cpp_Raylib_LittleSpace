@@ -9,23 +9,19 @@ ExperienceCube::~ExperienceCube()
 {
 }
 
-void ExperienceCube::Init(Vector2 position, Vector2 velocity, Vector2* target)
+void ExperienceCube::Init(Vector2 position, Vector2 velocity, Vector2* target, int amount)
 {
 	_position = position;
 	_velocity = velocity;
 	_active = true;
 	_target = target;
+	_amount = amount;
 }
 
 void ExperienceCube::Update(float deltaTime)
 {
-	if (!_active)
+	if (!_active || _target == nullptr)
 		return;
-
-	_lifetime -= deltaTime;
-
-	if (_lifetime <= 0)
-		_active = false;
 
 
 	Vector2 toTarget = Vector2Subtract(*_target, _position);
@@ -70,7 +66,21 @@ float ExperienceCube::GetSize()
 	return _size;
 }
 
+int ExperienceCube::GetExpValue()
+{
+	if (_amount <= 0)
+		return 0;
+
+	return _amount;
+}
+
+
 void ExperienceCube::SetActive(bool active)
 {
 	_active = active;
+}
+
+void ExperienceCube::SetAmount(int amount)
+{
+	_amount = amount;
 }
