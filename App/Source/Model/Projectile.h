@@ -51,8 +51,6 @@ struct Projectile
 	void Draw();
 };
 
-void UpdateProjectiles(float deltaTime);
-void DrawProjectiles();
 
 
 struct StraightTrajectory : Trajectory
@@ -101,5 +99,3 @@ struct OrbitTrajectory : Trajectory
         }
     }
 };
-
-extern std::vector<Projectile> projectiles;

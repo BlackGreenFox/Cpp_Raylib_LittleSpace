@@ -1,26 +1,6 @@
 #include "Projectile.h"
 #include <raymath.h>
 
-std::vector<Projectile> projectiles;
-
-void UpdateProjectiles(float deltaTime) 
-{
-	for (int i = 0; i < projectiles.size(); i++)
-	{
-		projectiles[i].Update(deltaTime);
-		if (!projectiles[i].alive)
-			projectiles.erase(projectiles.begin() + i);
-	}
-}
-
-void DrawProjectiles()
-{
-	for (auto& p : projectiles)
-	{
-		p.Draw();
-	}
-}
-
 void Projectile::Spawn() 
 {
 	startpos = position;

@@ -161,7 +161,6 @@
     <ClInclude Include="Source\Model\Item.h" />
     <ClInclude Include="Source\Model\Particle.h" />
     <ClInclude Include="Source\Model\Player.h" />
-    <ClInclude Include="Source\Model\PlayerStats.h" />
     <ClInclude Include="Source\Model\Projectile.h" />
     <ClInclude Include="Source\Utility\Utility.h" />
   </ItemGroup>

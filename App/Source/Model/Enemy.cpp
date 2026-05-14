@@ -41,10 +41,41 @@ bool Enemy::GetActive()
 	return _active;
 }
 
+bool Enemy::GetActive() const
+{
+	return _active;
+}
+
+bool Enemy::GetOutSide()
+{
+	return _outside;
+}
+
+bool Enemy::GetOutSide() const
+{
+	return _outside;
+}
+
+ENEMY_TYPE Enemy::GetEnemyType()
+{
+	return _enemyType;
+}
+
+ENEMY_TYPE Enemy::GetEnemyType() const
+{
+	return _enemyType;
+}
+
 void Enemy::SetActive(bool active)
 {
 	_active = active;
 }
+
+void Enemy::SetOutSide(bool outside)
+{
+	_outside = outside;
+}
+
 
 float Enemy::GetSize()
 {

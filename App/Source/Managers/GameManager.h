@@ -31,8 +31,8 @@ public:
 	void Draw();
 
 	void SpawnEnemy(Vector2 position, Vector2 velocity, ENEMY_TYPE type);
-	void SpawnExp(Vector2 position, int amount);
-	//void SpawnProjectile();
+	void SpawnExp(Vector2 position, int amount = 10);
+	void SpawnProjectile();
 
 
 private:
@@ -50,10 +50,13 @@ private:
 	GameState _gameState = GameState::Playing;
 
 
-	//void UpdateProjectiles(float deltaTime);
+	void UpdateProjectiles(float deltaTime);
 	void UpdateEnemies(float deltaTime);
+
+
 	void ProcessExpirience(float deltaTime);
 	void ProcessEnemies(float deltaTime);
+
 	//void HandleCollisions();
 	//void TrySpawnEnemy(float deltaTime);
 
@@ -79,7 +82,7 @@ private:
 	int _bossLevel = 5;
 	int _enemiesMax = 5;
 	float _spawnTimer = 0.0f;
-	float _enemySpawnInterval= 2.0f;
+	float _enemySpawnInterval = 2.0f;
 
 
 };

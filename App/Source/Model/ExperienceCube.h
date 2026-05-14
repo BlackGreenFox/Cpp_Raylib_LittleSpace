@@ -13,6 +13,8 @@ public:
 	void Draw();
 
 	bool GetActive();
+	bool GetActive() const;
+
 	Vector2 GetPosition();
 	float GetSize();
 	int GetExpValue();

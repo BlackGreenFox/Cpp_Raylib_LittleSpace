@@ -56,6 +56,11 @@ bool ExperienceCube::GetActive()
 	return _active;
 }
 
+bool ExperienceCube::GetActive() const
+{
+	return _active;
+}
+
 Vector2 ExperienceCube::GetPosition()
 {
 	return _position;

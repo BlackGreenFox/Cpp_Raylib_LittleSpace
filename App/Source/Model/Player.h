@@ -1,9 +1,15 @@
 #pragma once
 #include "raylib.h"
 #include "raymath.h"
-#include "Projectile.h"
-#include "Item.h"
+
+#include <vector>
+
 #include <CommonInclude.h>
+#include "Projectile.h"
+#include <Loadout.h>
+
+
+
 
 class Player {
 public:
@@ -14,25 +20,56 @@ public:
 	void Update(float deltaTime);
 	void Draw();
 
-	Vector2 GetPosition();
-	Vector2* GetPositionPtr();
+
+	void TakeDamage(float amount);
+	void Heal(float amount);
+
+	
+
+
+
+
+
+	void SetProjectileBuffer(std::vector<Projectile>* ptrBuffer);
 
 	void SetPosition(Vector2 value);
 
-	PlayerStats GetStats() const;
+
+
+	Loadout& GetLoadout();
+	Loadout& GetLoadout() const;
+
+	Vector2 GetPosition();
+	Vector2 GetPosition() const;
+	Vector2* GetPositionPtr();
+
+	float GetCurrentHeath();
+	float GetCurrentHeath() const;
+
+	float GetSize();
+	float GetSize() const;
+	
+	float GetExpAttractRange();
+	float GetExpAttractRange() const;
+
+	float GetExpPickupRange();
+	float GetExpPickupRange() const;
 
 private:
 	void Shoot();
 
-	PlayerStats stats;
-	ShotStats shootStats;
+	Loadout _loadout;
 
-	// For gun
-	float shootCooldown = 0;
+	float _currentHeath = 100;
+	Vector2 _position;
+	Vector2 _velocity;
+	float _rotate;
 
-	//
 
-	Vector2 position;
-	Vector2 velocity;
-	float rotate;
+	float _shootCooldown = 0.0f;
+	float _chargeCooldown = 0.0f;
+	bool _isLaserAcrive = false;
+
+
+	std::vector<Projectile>* _projectBuffer = nullptr;
 };

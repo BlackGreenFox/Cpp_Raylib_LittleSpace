@@ -67,7 +67,7 @@ namespace CollisionManager
 			if (!e.GetActive())
 				continue;
 
-			if (CheckCollisionCircles(player.GetPosition(), player.GetStats().expPickupRange, e.GetPosition(), e.GetSize()))
+			if (CheckCollisionCircles(player.GetPosition(), player.GetExpPickupRange(), e.GetPosition(), e.GetSize()))
 			{
 				std::cout << "Player picked up exp!" << std::endl;
 				e.SetActive(false);

@@ -6,7 +6,9 @@ typedef enum ENEMY_TYPE
 {
 	TRIANGLE = 3,
 	SQUARE = 4,
-	SIX_SIDES = 6
+	SIX_SIDES = 6,
+	EIGHT_SIDES = 8,
+	NINE_SIDES = 9
 }ENEMY_TYPE;
 
 
@@ -22,12 +24,23 @@ public:
 
 	// Get ^ Set
 	bool GetActive();
+	bool GetActive() const;
+	bool GetOutSide();
+	bool GetOutSide() const;
+	ENEMY_TYPE GetEnemyType();
+	ENEMY_TYPE GetEnemyType() const;
+
 	float GetSize();
 	Vector2 GetPosition();
+
+
 	void SetActive(bool active);
+	void SetOutSide(bool outside);
+
 
 private:
 	bool _active = false;
+	bool _outside = false;
 	ENEMY_TYPE _enemyType = SIX_SIDES;
 
 	Vector2 _position;

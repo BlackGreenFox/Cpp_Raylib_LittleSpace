@@ -1,9 +1,11 @@
 #pragma once
 #include "raylib.h"
 #include "Projectile.h"
+#include "CommonInclude.h"
 
 struct Loadout
 {
+	Color playerColor = MAIN_BAD_COLOR;
 	float playerSpeed = 200;
 	float playerSize = 20;
 	float playerMaxHealth = 100;

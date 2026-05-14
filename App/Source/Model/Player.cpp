@@ -13,13 +13,14 @@ Player::~Player()
 
 void Player::Init(Vector2 position) 
 {
-	this->position = position;
-
-
+	_position = position;
 }
 
 void Player::Shoot()
 {
+	if (!_projectBuffer)
+		return;
+
 	ShotType type = ShotType::Bullet;
 
 	int count = 1;
@@ -30,47 +31,56 @@ void Player::Shoot()
 		for (int i = 0; i < count; i++)
 		{
 			Projectile p;
-			p.position = position;
-			p.velocity.x = cosf(rotate * DEG2RAD);
-			p.velocity.y = sinf(rotate * DEG2RAD);
+			p.position = _position;
+			p.velocity.x = cosf(_rotate * DEG2RAD);
+			p.velocity.y = sinf(_rotate * DEG2RAD);
 			p.velocity = Vector2Rotate(p.velocity, (float)GetRandomValue(-25, 25) * DEG2RAD);
-			p.stats = shootStats;
+			p.stats.speed = _loadout.bulletSpeed;
+			p.stats.damage = _loadout.bulletDamage;
+			p.stats.distance = _loadout.bulletDistance;
+			p.stats.size = _loadout.bulletSize;
+			p.stats.color = _loadout.bulletColor;
 			StraightTrajectory* trajectory = new StraightTrajectory;
 			//trajectory->center = &this->position;
 			p.trajectory = trajectory;
 			p.type = type;
 			p.Spawn();
-			projectiles.push_back(p);
+			_projectBuffer->push_back(p);
 		}
 		break;
 	case ShotType::Laser:
-		if (projectiles.empty())
+		if (_projectBuffer->empty())
 		{
 			Projectile p;
-			p.position = position;
-			p.ownerPos = &this->position;     
-			p.ownerRotation = &this->rotate;
+			p.position = _position;
+			p.ownerPos = &this->_position;     
+			p.ownerRotation = &this->_rotate;
 
 
-			p.velocity.x = cosf(rotate * DEG2RAD);
-			p.velocity.y = sinf(rotate * DEG2RAD);
+			p.velocity.x = cosf(_rotate * DEG2RAD);
+			p.velocity.y = sinf(_rotate * DEG2RAD);
 			StraightTrajectory* trajectory = new StraightTrajectory;
 			//trajectory->center = &this->position;
 			p.trajectory = trajectory;
-			p.stats = shootStats;
+
+			p.stats.speed = _loadout.bulletSpeed;
+			p.stats.damage = _loadout.bulletDamage;
+			p.stats.distance = _loadout.bulletDistance;
+			p.stats.size = _loadout.bulletSize;
+			p.stats.color = _loadout.bulletColor;
 			p.type = type;
 			p.Spawn();
-			projectiles.push_back(p);
+			_projectBuffer->push_back(p);
 		}
 		else
 		{
-			for (auto& p : projectiles)
-			{
-				if (p.type == ShotType::Laser) {
-					p.velocity.x = cosf(rotate * DEG2RAD);
-					p.velocity.y = sinf(rotate * DEG2RAD);
-				}
-			}
+			//for (auto& p : _projectBuffer)
+			//{
+			//	if (p.type == ShotType::Laser) {
+			//		p.velocity.x = cosf(rotate * DEG2RAD);
+			//		p.velocity.y = sinf(rotate * DEG2RAD);
+			//	}
+			//}
 		}
 		break;
 	default:
@@ -82,62 +92,51 @@ void Player::Shoot()
 void Player::Update(float deltaTime) 
 {
 
-	shootCooldown -= deltaTime;
+	_shootCooldown -= deltaTime;
 
-	if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && shootCooldown <= 0)
+	if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) )
 	{
 		Shoot();
-		shootCooldown = stats.fireRate;
+
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 
 	if (IsKeyDown(KEY_W))
 	{
-		velocity.y = -1;
+		_velocity.y = -1;
 	}
 	else if (IsKeyDown(KEY_S))
 	{
-		velocity.y = 1;
+		_velocity.y = 1;
 	}
 	else
 	{
-		velocity.y = 0;
+		_velocity.y = 0;
 	}
 
 	if (IsKeyDown(KEY_A))
 	{
-		velocity.x = -1;
+		_velocity.x = -1;
 	}
 	else if (IsKeyDown(KEY_D))
 	{
-		velocity.x = 1;
+		_velocity.x = 1;
 	}
 	else
 	{
-		velocity.x = 0;
+		_velocity.x = 0;
 	}
 
 
-	if (velocity.x != 0 || velocity.y != 0)
+	if (_velocity.x != 0 || _velocity.y != 0)
 	{
-		velocity = Vector2Scale(velocity, stats.speed * deltaTime);
-		position = Vector2Add(position, velocity);
+		_velocity = Vector2Scale(_velocity, _loadout.playerSpeed * deltaTime);
+		_position = Vector2Add(_position, _velocity);
 	}
 
 
-	rotate = atan2f(GetMouseY() - position.y, GetMouseX() - position.x);
-	rotate = rotate * RAD2DEG;
+	_rotate = atan2f(GetMouseY() - _position.y, GetMouseX() - _position.x);
+	_rotate = _rotate * RAD2DEG;
 
 
 }
@@ -149,39 +148,53 @@ void Player::Draw()
 	float offset = 60.0f;
 
 	Vector2 leftPos = {
-		position.x + cosf(DEG2RAD * (rotate + angleStep)) * offset,
-		position.y + sinf(DEG2RAD * (rotate + angleStep)) * offset
+		_position.x + cosf(DEG2RAD * (_rotate + angleStep)) * offset,
+		_position.y + sinf(DEG2RAD * (_rotate + angleStep)) * offset
 	};
 
 
 	Vector2 rightPos = {
-		position.x + cosf(DEG2RAD * (rotate - angleStep)) * offset,
-		position.y + sinf(DEG2RAD * (rotate - angleStep)) * offset
+		_position.x + cosf(DEG2RAD * (_rotate - angleStep)) * offset,
+		_position.y + sinf(DEG2RAD * (_rotate - angleStep)) * offset
 	};
 
-	DrawPolyLinesEx(position, 3, 40.0f, rotate, 15.0f, MAIN_BAD_COLOR);
-	DrawPolyLinesEx(leftPos, 3, smallRadius, rotate, 15.0f, WHITE);
-	DrawPolyLinesEx(rightPos, 3, smallRadius, rotate, 15.0f, WHITE);
+	DrawPolyLinesEx(_position, 3, _loadout.playerSize, _rotate, 15.0f, _loadout.playerColor);
+	DrawPolyLinesEx(leftPos, 3, smallRadius, _rotate, 15.0f, WHITE);
+	DrawPolyLinesEx(rightPos, 3, smallRadius, _rotate, 15.0f, WHITE);
 
 	//DrawCircleLines(position.x,position.y, stats.expAttractRange, WHITE);
 }
 
+
+void Player::SetProjectileBuffer(std::vector<Projectile>* ptrBuffer)
+{
+	_projectBuffer = ptrBuffer;
+}
+
+
+
+
 Vector2 Player::GetPosition()
 {
-	return position;
+	return _position;
 }
 
 Vector2* Player::GetPositionPtr()
 {
-	return &position;
+	return &_position;
+}
+
+float Player::GetExpPickupRange()
+{
+	return _loadout.expPickupRange;
+}
+
+float Player::GetExpPickupRange() const
+{
+	return _loadout.expPickupRange;
 }
 
 void Player::SetPosition(Vector2 value)
 {
-	position = value;
-}
-
-PlayerStats Player::GetStats() const
-{
-	return stats;
+	_position = value;
 }
