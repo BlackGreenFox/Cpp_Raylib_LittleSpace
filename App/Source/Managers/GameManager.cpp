@@ -101,7 +101,6 @@ void GameManager::UpdateEnemies(float deltaTime)
 	ENEMY_TYPE type;
 
 
-
 	if (_level <= 2)		type = TRIANGLE;
 	else if (_level <= 3)   type = (random < 70) ? TRIANGLE : SQUARE;
 	else if (_level <= 4)   type = (random < 70) ? TRIANGLE : SQUARE;
@@ -271,4 +270,33 @@ void GameManager::SpawnExp(Vector2 position, int amount)
 	ExperienceCube exp;
 	exp.Init(position, { 0, 0 }, _player.GetPositionPtr(), amount);
 	_expCubes.push_back(exp);
+}
+
+
+//
+
+void GameManager::StateLevelUp()
+{
+	_gameState = GameState::LevelUp;
+	
+	_itemChoices = RollItems(5, _level);
+	int count = _itemChoices.size();
+
+	Vector2 panelSize = { 300, 150 };
+	float gap = 30.0f;
+	float totalWidth = count * panelSize.x + (count - 1) * gap;
+	float startX = (_screenWidth - totalWidth) * 0.5f;
+	
+	float y = (_screenHeight - panelSize.y) * 0.5f;
+
+	_itemPanel.clear();
+	
+	for (int index = 0; index < count; index++)
+	{
+		Item& item = _itemChoices[index];
+		float x = startX + index * (panelSize.x + gap);
+
+		_itemPanel.push_back({ item, {x, y}, panelSize });
+	}
+
 }

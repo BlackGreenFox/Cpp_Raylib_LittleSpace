@@ -57,6 +57,9 @@ private:
 	void ProcessExpirience(float deltaTime);
 	void ProcessEnemies(float deltaTime);
 
+
+	void StateLevelUp();
+
 	//void HandleCollisions();
 	//void TrySpawnEnemy(float deltaTime);
 
@@ -73,6 +76,7 @@ private:
 	vector<Projectile>		 _projectiles;
 	vector<ExperienceCube>	 _expCubes;
 
+	vector<Item>			 _itemChoices;
 
 	int _level = 1;
 	int _exp = 0;
@@ -85,4 +89,5 @@ private:
 	float _enemySpawnInterval = 2.0f;
 
 
+	vector<PanelItem>		 _itemPanel;
 };
