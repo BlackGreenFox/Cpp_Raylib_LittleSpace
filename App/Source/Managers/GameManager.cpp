@@ -61,9 +61,25 @@ void GameManager::Update(float deltaTime)
 			std::remove_if(_expCubes.begin(), _expCubes.end(),
 				[](const ExperienceCube& c) { return !c.GetActive(); }),
 			_expCubes.end());
+
+		UpdateExpirience();
 	}
 		break;
 	case GameState::LevelUp:
+
+		for (PanelItem& panel : _itemPanel)
+		{
+			panel.Update(deltaTime);
+		}
+
+		for (int index = 0; index < _itemPanel.size(); index++)
+		{	
+			if (_itemPanel[index].WasJustClicked())
+			{
+				EndLevelUp(index);
+				break;
+			}
+		}
 
 		break;
 	case GameState::Pause:
@@ -78,6 +94,32 @@ void GameManager::Update(float deltaTime)
 	}
 }
 
+void GameManager::UpdateExpirience()
+{
+
+	if (_exp < _expToNextLevel)
+		return;
+
+	//if (_expBar && _expBar.isAnimation()) return;
+
+	int overflow = _exp - _expToNextLevel;
+	_level++;
+
+	int newExpToNextLevel = (int)((float)_expToNextLevel * 1.5f);
+	if (newExpToNextLevel <= _expToNextLevel + 25)
+	{
+		newExpToNextLevel = _expToNextLevel + 25;
+	}
+
+	_expToNextLevel = newExpToNextLevel;
+	_exp = overflow;
+
+	_expBar.SetValue(_exp);
+	_expBar.SetMaxValue(_expToNextLevel);
+
+
+	StateLevelUp();
+}
 
 void GameManager::UpdateProjectiles(float deltaTime)
 {
@@ -104,7 +146,7 @@ void GameManager::UpdateEnemies(float deltaTime)
 	if (_level <= 2)		type = TRIANGLE;
 	else if (_level <= 3)   type = (random < 70) ? TRIANGLE : SQUARE;
 	else if (_level <= 4)   type = (random < 70) ? TRIANGLE : SQUARE;
-
+	else                    type = TRIANGLE;
 
 	int dir = GetRandomValue(0, 3);
 	Vector2 pos;
@@ -156,10 +198,18 @@ void GameManager::Draw()
 	}
 
 
-
 	// Draw GUI
 	_expBar.Draw();
 
+	if (_gameState == GameState::LevelUp)
+	{
+		DrawRectangle(0, 0, _screenWidth, _screenHeight, {0, 0, 0, 160});
+
+		for (auto& panel : _itemPanel)
+		{
+			panel.Draw();
+		}
+	}
 }
 
 
@@ -281,8 +331,9 @@ void GameManager::StateLevelUp()
 	
 	_itemChoices = RollItems(5, _level);
 	int count = _itemChoices.size();
-
-	Vector2 panelSize = { 300, 150 };
+	std::cout << count << " items rolled for level up." << std::endl;
+	std::cout << _itemChoices.size() << " items rolled for level up." << std::endl;
+	Vector2 panelSize = { 300 , 450 };
 	float gap = 30.0f;
 	float totalWidth = count * panelSize.x + (count - 1) * gap;
 	float startX = (_screenWidth - totalWidth) * 0.5f;
@@ -295,8 +346,24 @@ void GameManager::StateLevelUp()
 	{
 		Item& item = _itemChoices[index];
 		float x = startX + index * (panelSize.x + gap);
+		std::cout << "Panel " << index << ": " << item.name << std::endl;
 
-		_itemPanel.push_back({ item, {x, y}, panelSize });
+		_itemPanel.push_back({ {x, y}, panelSize, item.name, item.description, item.rarity });
 	}
 
+}
+
+void GameManager::EndLevelUp(int index)
+{
+	_gameState = GameState::Playing;
+
+	if (index >= 0 && index < _itemChoices.size())
+	{
+		Item& chosenItem = _itemChoices[index];
+		if(chosenItem.apply)
+			chosenItem.apply(_player.GetLoadout());
+	}
+
+	_itemChoices.clear();
+	_itemPanel.clear();
 }

@@ -3,6 +3,12 @@
 #include "Projectile.h"
 #include "CommonInclude.h"
 
+enum class TrajectoryKind
+{
+	Straight,
+	Wave
+};
+
 struct Loadout
 {
 	Color playerColor = MAIN_BAD_COLOR;
@@ -39,4 +45,5 @@ struct Loadout
 	float homingTurnRate = 20;
 	int splitCount = 3;
 
+	TrajectoryKind trajectory = TrajectoryKind::Straight;
 };

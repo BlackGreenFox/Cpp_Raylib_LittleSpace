@@ -1,6 +1,7 @@
 #pragma once
 #include "raylib.h"
 #include <vector>
+#include <iostream>
 
 #include <CommonInclude.h>
 #include <GUI/Bar.h>
@@ -52,13 +53,14 @@ private:
 
 	void UpdateProjectiles(float deltaTime);
 	void UpdateEnemies(float deltaTime);
-
+	void UpdateExpirience();
 
 	void ProcessExpirience(float deltaTime);
 	void ProcessEnemies(float deltaTime);
 
 
 	void StateLevelUp();
+	void EndLevelUp(int index);
 
 	//void HandleCollisions();
 	//void TrySpawnEnemy(float deltaTime);

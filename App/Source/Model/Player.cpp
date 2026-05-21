@@ -174,6 +174,14 @@ void Player::SetProjectileBuffer(std::vector<Projectile>* ptrBuffer)
 
 
 
+Loadout& Player::GetLoadout()
+{
+	return _loadout;
+}
+
+
+
+
 Vector2 Player::GetPosition()
 {
 	return _position;

@@ -37,7 +37,6 @@ public:
 
 
 	Loadout& GetLoadout();
-	Loadout& GetLoadout() const;
 
 	Vector2 GetPosition();
 	Vector2 GetPosition() const;

@@ -147,7 +147,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Loadout.h" />
     <ClInclude Include="Source\CommonInclude.h" />
     <ClInclude Include="Source\GUI\Bar.h" />
     <ClInclude Include="Source\GUI\Button.h" />
@@ -159,9 +158,11 @@
     <ClInclude Include="Source\Model\Enemy.h" />
     <ClInclude Include="Source\Model\ExperienceCube.h" />
     <ClInclude Include="Source\Model\Item.h" />
+    <ClInclude Include="Source\Model\Loadout.h" />
     <ClInclude Include="Source\Model\Particle.h" />
     <ClInclude Include="Source\Model\Player.h" />
     <ClInclude Include="Source\Model\Projectile.h" />
+    <ClInclude Include="Source\Utility\Rarity.h" />
     <ClInclude Include="Source\Utility\Utility.h" />
   </ItemGroup>
   <ItemGroup>

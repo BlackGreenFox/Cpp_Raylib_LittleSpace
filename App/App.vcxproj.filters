@@ -46,6 +46,9 @@
     <ClInclude Include="Source\Model\Item.h">
       <Filter>Model</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Model\Loadout.h">
+      <Filter>Model</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Model\Particle.h">
       <Filter>Model</Filter>
     </ClInclude>
@@ -55,11 +58,11 @@
     <ClInclude Include="Source\Model\Projectile.h">
       <Filter>Model</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utility\Utility.h">
+    <ClInclude Include="Source\Utility\Rarity.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Loadout.h">
-      <Filter>Model</Filter>
+    <ClInclude Include="Source\Utility\Utility.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

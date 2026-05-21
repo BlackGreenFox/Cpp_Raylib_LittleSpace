@@ -39,5 +39,7 @@ public:
 	void Draw() override;
 
 	void SetValue(float value);
+	void SetMaxValue(float value) { _maxValue = value; }
 	float GetValue() const { return _value; }
+
 };
