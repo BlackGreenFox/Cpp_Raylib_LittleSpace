@@ -1,16 +1,12 @@
-#include "Bar.h"
-#include <iostream>
+﻿#include "Bar.h"
+#include <cmath>
 
 
-bool IsSizeEqual(Vector2 a, Vector2 b)
+static bool IsSizeEqual(Vector2 a, Vector2 b)
 {
-	return a.x - b.x < 0.5f && a.y - b.y < 0.5f;
-}
-
-
-Bar::Bar()
-{
-
+	// Колишній код порівнював лише в один бік (a.x - b.x < 0.5f), тому при
+	// зменшенні бар "залипав" — fix через fabsf по обох осях.
+	return std::fabs(a.x - b.x) < 0.5f && std::fabs(a.y - b.y) < 0.5f;
 }
 
 
@@ -24,40 +20,23 @@ Bar::Bar(Vector2 position, Vector2 size, Color color, float value, float maxValu
 	_maxValue = maxValue;
 	_value = value;
 
-	float percent = _value / _maxValue;
+	float percent = (_maxValue > 0.0f) ? (_value / _maxValue) : 0.0f;
 	_size.x = _maxSize.x * percent;
-	 
+
 	_bufferSize = _size;
+	_targetSize = _size;
 }
 
 Bar::~Bar()
 {
 }
 
-void Bar::Init(Vector2 position, Vector2 size, Color color, float value, float maxValue)
-{
-	_position = position;
-	_size = size;
-	_maxSize = size;
-	_color = color;
-
-	_maxValue = maxValue;
-	_value = value;
-
-	float percent = _value / _maxValue;
-
-	_size.x = _maxSize.x * percent;
-	_bufferSize = _size;
-}
-
-
 void Bar::SetValue(float value)
 {
 	float oldValue = _value;
 	_value = value;
 
-
-	float percent = _value / _maxValue;
+	float percent = (_maxValue > 0.0f) ? (_value / _maxValue) : 0.0f;
 	_targetSize = { _maxSize.x * percent, _size.y };
 
 	if (_value > oldValue)
@@ -70,6 +49,22 @@ void Bar::SetValue(float value)
 	}
 }
 
+void Bar::SetMaxValue(float maxValue)
+{
+	_maxValue = maxValue;
+	float percent = (_maxValue > 0.0f) ? (_value / _maxValue) : 0.0f;
+	_targetSize = { _maxSize.x * percent, _size.y };
+}
+
+void Bar::ResetAndSetMax(float newMax)
+{
+	_maxValue = newMax;
+	_value = 0.0f;
+	_size = { 0.0f, _maxSize.y };
+	_bufferSize = _size;
+	_targetSize = _size;
+	_state = AnimationState::None;
+}
 
 void Bar::Update(float deltaTime)
 {
@@ -122,9 +117,9 @@ void Bar::Update(float deltaTime)
 
 void Bar::Draw()
 {
-	if (!_isActive) 
+	if (!_isVisible)
 		return;
-	
+
 	DrawRectangleV(_position, _maxSize, SECOND_BACKGROUND_COLOR);
 	DrawRectangleV(_position, _bufferSize, WHITE);
 	DrawRectangleV(_position, _size, _color);

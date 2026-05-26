@@ -19,8 +19,7 @@ public:
 	void Init(Vector2 position);
 	void Update(float deltaTime);
 	void Draw();
-
-
+	
 	void TakeDamage(float amount);
 	void Heal(float amount);
 
@@ -29,21 +28,23 @@ public:
 
 
 
-
 	void SetProjectileBuffer(std::vector<Projectile>* ptrBuffer);
-
 	void SetPosition(Vector2 value);
 
 
 
 	Loadout& GetLoadout();
+	Loadout& GetLoadout() const;
 
 	Vector2 GetPosition();
 	Vector2 GetPosition() const;
 	Vector2* GetPositionPtr();
 
-	float GetCurrentHeath();
-	float GetCurrentHeath() const;
+	float GetMaxHealth();
+	float GetMaxHealth() const;
+
+	float GetCurrentHealth();
+	float GetCurrentHealth() const;
 
 	float GetSize();
 	float GetSize() const;
@@ -55,7 +56,13 @@ public:
 	float GetExpPickupRange() const;
 
 private:
-	void Shoot();
+	void HandlerShooting(float deltaTime);
+	void HandlerMovement(float deltaTime);
+
+	void FireLazer(float angle);
+	void FireBullet(float angle);
+
+	void DestroyOwner();
 
 	Loadout _loadout;
 
@@ -63,12 +70,16 @@ private:
 	Vector2 _position;
 	Vector2 _velocity;
 	float _rotate;
-
+	bool _isAlive = true;
 
 	float _shootCooldown = 0.0f;
 	float _chargeCooldown = 0.0f;
+	float _chaergeProgress = 0.0f;
 	bool _isLaserAcrive = false;
 
 
 	std::vector<Projectile>* _projectBuffer = nullptr;
+
+	int _screenWidth = 800;
+	int _screenHeight = 600;
 };

@@ -1,4 +1,4 @@
-#include "GameManager.h"
+﻿#include "GameManager.h"
 
 const float ASTEROID_RANDOM_ANGLE = 30 * DEG2RAD;
 
@@ -24,7 +24,7 @@ void GameManager::Init(float screenWidth, int screenHeight)
 	Vector2 size_level = Vector2{ 1700, 20 };
 	Vector2 pos_level = { (float)(GetScreenWidth() / 2 - size_level.x / 2), (float)(GetScreenHeight() - 100) };
 
-	_expBar.Init(pos_level, size_level, MAIN_GOOD_COLOR, _exp, _expToNextLevel);
+	_expBar = std::make_unique<Bar>(pos_level, size_level, MAIN_GOOD_COLOR, 0.0f, (float)_expToNextLevel);
 
 	_expCubes.push_back(ExperienceCube());
 	_expCubes[0].Init({ 300, 300 }, { 0, 0 }, _player.GetPositionPtr());
@@ -114,8 +114,11 @@ void GameManager::UpdateExpirience()
 	_expToNextLevel = newExpToNextLevel;
 	_exp = overflow;
 
-	_expBar.SetValue(_exp);
-	_expBar.SetMaxValue(_expToNextLevel);
+	if (_expBar)
+	{
+		_expBar->ResetAndSetMax((float)_expToNextLevel);
+		_expBar->SetValue((float)_exp);
+	}
 
 
 	StateLevelUp();
@@ -172,9 +175,7 @@ void GameManager::UpdateEnemies(float deltaTime)
 
 	SpawnEnemy(pos, velocity, type);
 }
-
-
-
+ 
 void GameManager::Draw()
 {
 	// Draw game world
@@ -199,7 +200,22 @@ void GameManager::Draw()
 
 
 	// Draw GUI
-	_expBar.Draw();
+	if (_expBar) _expBar->Draw();
+	if (_expBar) _expBar->Draw();
+
+	// Level / EXP лічильник
+	const char* lvl = TextFormat("Level %d   EXP %d/%d", _level, _exp, _expToNextLevel);
+	DrawText(lvl, 30, _screenHeight - 60, 22, WHITE);
+
+	// HP-бар гравця
+	float hp = _player.GetCurrentHealth();
+	float maxHp = _player.GetMaxHealth();
+	const float pad = 30.0f, w = 260.0f, h = 22.0f;
+	Vector2 hpos = { pad, (float)_screenHeight - 130.0f };
+	DrawRectangleV(hpos, { w, h }, CLITERAL(Color) { 30, 30, 35, 220 });
+	float pct = (maxHp > 0.0f) ? hp / maxHp : 0.0f;
+	DrawRectangleV(hpos, { w * pct, h }, MAIN_BAD_COLOR);
+	DrawText(TextFormat("HP %.0f / %.0f", hp, maxHp), (int)pad + 6, (int)hpos.y + 3, 16, WHITE);
 
 	if (_gameState == GameState::LevelUp)
 	{
@@ -292,13 +308,13 @@ void GameManager::ProcessExpirience(float deltaTime)
 	}
 
 	CollisionManager::Update(_player, _enemies, _projectiles, _expCubes, deltaTime);
-	_expBar.Update(deltaTime);
+	_expBar->Update(deltaTime);
 	for (auto& exp : _expCubes)
 	{
 		if (exp.GetActive()) continue;
 		
 		_exp += exp.GetExpValue();
-		_expBar.SetValue(_exp);
+		_expBar->SetValue(_exp);
 	}
 }
 

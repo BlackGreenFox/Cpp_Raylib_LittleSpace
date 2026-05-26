@@ -2,6 +2,9 @@
 #include "raylib.h"
 #include <vector>
 #include <iostream>
+#include <memory>
+#include <cmath>
+#include <algorithm>
 
 #include <CommonInclude.h>
 #include <GUI/Bar.h>
@@ -67,8 +70,8 @@ private:
 
 
 
-	Bar _expBar;
-	Bar _bossHealthBar;
+	std::unique_ptr<Bar> _expBar;
+	std::unique_ptr<Bar> _bossHealthBar;
 
 
 
